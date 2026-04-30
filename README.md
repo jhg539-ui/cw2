@@ -25,7 +25,7 @@ Random baseline for 37 classes is roughly 2.7%, so the model achieves roughly 18
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ResNet-style CNN with 4 stages:
 
@@ -42,7 +42,7 @@ ResNet-style CNN with 4 stages:
 
 ---
 
-## 🎓 Training Recipe
+## Training Recipe
 
 | Component | Setting |
 |-----------|---------|
@@ -68,13 +68,13 @@ Only Resize, ToTensor, and Normalize — no test-time augmentation, in line with
 
 ---
 
-## 💻 Hardware
+## Hardware
 
 Trained on NVIDIA GTX 1080 Ti (csgpu1, University of York) with PyTorch 2.4.0 + CUDA 12.1. Total training time ~10 minutes.
 
 ---
 
-## 📚 Dataset
+## Dataset
 
 Oxford-IIIT Pet Dataset — 37 cat and dog breeds.
 - trainval split: 3,680 images (training)
@@ -84,7 +84,7 @@ Downloaded automatically via `torchvision.datasets.OxfordIIITPet`.
 
 ---
 
-## 📖 Acknowledgements
+## Acknowledgements
 
 Architecture inspired by He et al. (2015), *"Deep Residual Learning for Image Recognition"*. Implementation written from scratch — no pretrained weights used.
 EOF
