@@ -1,3 +1,10 @@
+# Architecture inspired by ResNet (He et al., 2015, "Deep Residual
+# Learning for Image Recognition"). Implementation written from scratch.
+
+# Architecture inspired by ResNet (He et al., 2015, "Deep Residual
+# Learning for Image Recognition"). Implementation written from scratch.
+# Uses standard ResNet-18-like layout: 7x7 stem -> 4 stages of ResBlocks -> GAP -> FC.
+
 import torch
 import torch.nn as nn
 

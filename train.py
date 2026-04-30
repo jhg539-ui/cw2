@@ -7,6 +7,23 @@ from torch.utils.data import DataLoader
 from model import PetClassifier
 from tqdm import tqdm
 
+import random
+torch.manual_seed(42)
+torch.cuda.manual_seed_all(42)
+np.random.seed(42)
+random.seed(42)
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
+
+# Reproducibility
+import random
+torch.manual_seed(42)
+torch.cuda.manual_seed_all(42)
+np.random.seed(42)
+random.seed(42)
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
+
 
 def mixup_data(x, y, alpha=0.2):
     lam = np.random.beta(alpha, alpha) if alpha > 0 else 1.0
