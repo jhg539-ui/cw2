@@ -12,7 +12,9 @@ python test.py    (evaluates on trainval and test sets)
 
 ## Reported accuracy
 - Train: 74.86%
-- Test:  50.67% (with TTA)
+- Test:  48.13%
+
+Random baseline for 37 classes is roughly 2.7%, so the model achieves roughly 18 times better than chance.
 
 ## Notes
 - Trained from scratch on Oxford-IIIT Pet trainval (3680 images).
@@ -21,11 +23,68 @@ python test.py    (evaluates on trainval and test sets)
 - First run downloads dataset (~800 MB) automatically via torchvision.
 - Trained on NVIDIA GTX 1080 Ti with PyTorch 2.4.0+cu121.
 
-## Architecture summary
-ResNet-style with 4 stages, each containing 2 ResBlocks (channels: 64, 128, 256, 512).
-Global average pooling + dropout + linear classifier. Trained with SGD + Nesterov momentum,
-cosine LR schedule with linear warmup, MixUp augmentation, and label smoothing.
+---
 
-## Test-Time Augmentation
-Test accuracy is reported using TTA: predictions are averaged across 5 augmented versions
-of each image (original, horizontal flip, center crop variations) for more robust evaluation.
+## 🏗️ Architecture
+
+ResNet-style CNN with 4 stages:
+
+| Stage | Layers | Output |
+|-------|--------|--------|
+| Stem | 7×7 conv (stride 2) → MaxPool | 56×56 |
+| Layer 1 | 2× ResBlock (64 channels) | 56×56 |
+| Layer 2 | 2× ResBlock (128 channels, stride 2) | 28×28 |
+| Layer 3 | 2× ResBlock (256 channels, stride 2) | 14×14 |
+| Layer 4 | 2× ResBlock (512 channels, stride 2) | 7×7 |
+| Head | Global Avg Pool → Dropout(0.3) → Linear | 37 classes |
+
+**Total parameters:** 11,195,493
+
+---
+
+## 🎓 Training Recipe
+
+| Component | Setting |
+|-----------|---------|
+| Optimiser | SGD with Nesterov momentum (0.9) |
+| Learning rate | 0.1 (cosine decay with 3-epoch warmup) |
+| Weight decay | 5e-4 |
+| Batch size | 128 |
+| Epochs | 30 |
+| Loss | Cross-Entropy with label smoothing (0.1) |
+| Random seed | 42 |
+
+### Training Data Augmentation
+- Resize → RandomCrop (256→224)
+- RandomHorizontalFlip
+- RandomRotation (±15°)
+- ColorJitter
+- Normalisation
+- RandomErasing
+- MixUp (α=0.2)
+
+### Test-time Processing
+Only Resize, ToTensor, and Normalize — no test-time augmentation, in line with coursework rules.
+
+---
+
+## 💻 Hardware
+
+Trained on NVIDIA GTX 1080 Ti (csgpu1, University of York) with PyTorch 2.4.0 + CUDA 12.1. Total training time ~10 minutes.
+
+---
+
+## 📚 Dataset
+
+Oxford-IIIT Pet Dataset — 37 cat and dog breeds.
+- trainval split: 3,680 images (training)
+- test split: 3,669 images (final evaluation only)
+
+Downloaded automatically via `torchvision.datasets.OxfordIIITPet`.
+
+---
+
+## 📖 Acknowledgements
+
+Architecture inspired by He et al. (2015), *"Deep Residual Learning for Image Recognition"*. Implementation written from scratch — no pretrained weights used.
+EOF
