@@ -13,6 +13,7 @@ python test.py    (evaluates on trainval and test sets)
 ## Reported accuracy
 - Train: 74.86%
 - Test:  48.13%
+
 Random baseline for 37 classes is roughly 2.7%, so the model achieves roughly 18 times better than chance.
 
 ## Notes
